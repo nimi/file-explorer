@@ -1,6 +1,6 @@
 import { DIRECTORY, FILE } from "./constants.js"
 
-const DEFAULT_DATE = new Date("July 2020")
+const DEFAULT_DATE = new Date("July 1, 2020")
 
 /**
  interface ITreeNode {
