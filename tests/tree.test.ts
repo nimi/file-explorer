@@ -46,4 +46,53 @@ describe("Tree", () => {
 
     expect(tree.root.children[0].size).toBe(0)
   })
+
+  it("should find children by node when node exists", () => {
+    const tree = Tree.make({
+      type: "folder",
+      name: "a",
+      children: [
+        {
+          type: "folder",
+          name: "b",
+          children: [
+            {
+              type: "folder",
+              name: "c",
+            },
+            {
+              type: "folder",
+              name: "d",
+            },
+          ],
+        },
+      ],
+    })
+    expect(tree.findChildren("b")).not.toBeUndefined()
+    expect(tree.findChildren("b").length).toBe(2)
+  })
+
+  it("should not find children by node when node does not exist", () => {
+    const tree = Tree.make({
+      type: "folder",
+      name: "a",
+      children: [
+        {
+          type: "folder",
+          name: "b",
+          children: [
+            {
+              type: "folder",
+              name: "c",
+            },
+            {
+              type: "folder",
+              name: "d",
+            },
+          ],
+        },
+      ],
+    })
+    expect(tree.findChildren("nope")).toBeUndefined()
+  })
 })

@@ -34,6 +34,26 @@ export class Tree {
     this.root = root ? TreeNode.make(root) : undefined
   }
 
+  findChildren(name, root = this.root) {
+    if (!root) return undefined
+
+    let current = root
+
+    if (current.name === name) {
+      return current.children
+    }
+
+    let children = current.children ?? []
+
+    for (const child of children) {
+      const maybeFound = this.findChildren(name, child)
+
+      if (maybeFound) {
+        return maybeFound
+      }
+    }
+  }
+
   toJSON() {
     if (!this.root) return undefined
 
