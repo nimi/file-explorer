@@ -71,6 +71,9 @@ export class FileExplorerApp extends HTMLElement {
         this.shadowRoot
           .querySelector("directory-content")
           .setAttribute("dir", this.selectedDir)
+        this.shadowRoot
+          .querySelector("directory-tree")
+          .setAttribute("dir", this.selectedDir)
       })
   }
 

@@ -6,22 +6,27 @@ const hasChildDirectories = (item) =>
   item.children.length &&
   item.children.some((child) => child.type === DIRECTORY)
 
-const renderTreeItems = (items) => `
+const renderTreeItems = (items, { toggled } = {}) => `
   <ul>
     ${[...items]
       .filter(isDirectory)
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name)
+      })
       .map((item) => {
-        return renderTreeItem(item)
+        return renderTreeItem(item, { toggled })
       })
       .join("")}
   </ul>
 `
 
-const renderTreeItem = (item) => `
+const renderTreeItem = (item, { toggled } = {}) => `
   <li>
     <button
       hidden="${hasChildDirectories(item) ? "false" : "true"}"
-      class="directory-toggle" aria-expanded="false"
+      class="directory-toggle" aria-expanded="${
+        toggled?.get(item.name) ? "true" : "false"
+      }"
     >
       <span role="img" aria-label="">▶</span>
       <span class="visually-hidden">Toggle directory</span>
@@ -30,8 +35,14 @@ const renderTreeItem = (item) => `
       <span class="directory-icon" role="img" aria-label="">📂</span>
       <span class="directory-label">${item.name}</span>
     </button>
-    ${item.children ? renderTreeItems(item.children) : ""}
+    ${
+      item.children && !!toggled?.get(item.name)
+        ? renderTreeItems(item.children, { toggled })
+        : ""
+    }
   </li>`
+
+const isOpen = (node) => node.getAttribute("aria-expanded") === "true"
 
 export class DirectoryTree extends HTMLElement {
   static styles = `
@@ -41,11 +52,11 @@ export class DirectoryTree extends HTMLElement {
 
     button:focus,
     button:active {
-      outline: yellow solid 2px !important;
+      outline: var(--outline-color) dashed 1px !important;
     }
 
     .selected {
-      background-color: var(--selected);
+      background-color: var(--selected-color);
     }
 
     button[aria-expanded='false'] + button + ul {
@@ -62,14 +73,14 @@ export class DirectoryTree extends HTMLElement {
 
     ul ul {
       grid-area: children;
-      padding-left: 1.5rem;
+      padding-left: var(--size-lg);
     }
 
     li {
       list-style-type: none;
       display: grid;
       align-items: center;
-      grid-template-columns: 1.5rem auto;
+      grid-template-columns: var(--size-lg) auto;
       grid-template-rows: auto;
       grid-template-areas:
         "toggle directory"
@@ -88,23 +99,23 @@ export class DirectoryTree extends HTMLElement {
     }
 
     .directory {
-      line-height: 2rem;
-      padding-left: 0.5rem;
+      line-height: var(--size-xl);
+      padding-left: var(--size-sm);
       flex: 1 1 auto;
       font-weight: 500;
       grid-area: directory;
     }
 
     .directory-icon {
-      padding-right: 0.5rem;
+      padding-right: var(--size-sm);
       display: inline-block;
     }
 
     .directory-toggle {
-      line-height: 0.6rem;
+      line-height: calc(var(--size-sm) + 0.1rem);
       text-align: center;
-      width: 1.5rem;
-      height: 1.5rem;
+      width: var(--size-lg);
+      height: var(--size-lg);
       grid-area: toggle;
     }
 
@@ -129,13 +140,83 @@ export class DirectoryTree extends HTMLElement {
 
   set data(tree) {
     this._data = tree.toJSON()
-    this.render()
+    this.updateView()
+  }
+
+  constructor() {
+    super()
+    this.toggled = new Map()
   }
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
+    this.updateView()
+  }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name !== "dir" || !this.shadowRoot) return
+
+    this.updateView()
+  }
+
+  setEventListeners() {
+    const root = this.shadowRoot
+    const items = root?.querySelectorAll("li") || []
+
+    for (var i = 0; i < items.length; i++) {
+      this.setActiveItem(items[i])
+    }
+  }
+
+  updateView() {
     this.render()
+    this.setEventListeners()
+  }
+
+  setActiveItem(item) {
+    const dir = item.querySelector(".directory")
+    const toggle = item.querySelector(".directory-toggle")
+    const toggleExpanded = () => {
+      if (isOpen(toggle)) {
+        this.toggled.set(dir.id, false)
+        toggle.setAttribute("aria-expanded", "false")
+      } else {
+        this.toggled.set(dir.id, true)
+        toggle.setAttribute("aria-expanded", "true")
+      }
+
+      this.updateView()
+    }
+
+    if (dir.id === this.getAttribute("dir")) {
+      dir.classList.add("selected")
+    }
+
+    toggle.addEventListener("click", toggleExpanded)
+
+    dir.addEventListener("click", () => {
+      const lastSelected = this.shadowRoot.querySelector(".selected")
+
+      if (lastSelected) {
+        lastSelected.classList.remove("selected")
+      }
+
+      if (!isOpen(toggle)) {
+        this.toggled.set(dir.id, true)
+        toggle.setAttribute("aria-expanded", "true")
+      }
+
+      dir.classList.add("selected")
+
+      this.dispatchEvent(
+        new CustomEvent("dir-select", {
+          detail: {
+            id: dir.id,
+          },
+          bubbles: true,
+        })
+      )
+    })
   }
 
   render() {
@@ -144,7 +225,7 @@ export class DirectoryTree extends HTMLElement {
         ${DirectoryTree.styles}
       </style>
       <div class="directory-tree">
-        ${renderTreeItems([this.data])}
+        ${renderTreeItems([this.data], { toggled: this.toggled })}
       </div>
     `
   }

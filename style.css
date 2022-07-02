@@ -8,9 +8,11 @@
   --size-md: 1rem;
   --size-lg: 1.5rem;
   --size-xl: 2rem;
-  --size-side-nav: 18rem;
+  --size-side-nav: 20rem;
   /* Color */
   --border-color: #eee;
+  --selected-color: #dfdada;
+  --outline-color: #333;
 }
 
 /* Reset adapted from https://www.joshwcomeau.com/css/custom-css-reset/ */
