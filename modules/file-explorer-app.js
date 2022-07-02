@@ -28,6 +28,18 @@ export class FileExplorerApp extends HTMLElement {
       padding: var(--size-sm) 0;
       width: var(--size-xl);
     }
+    .handle {
+      content: '↔️';
+      position: absolute;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-left: calc(var(--size-lg) * -1);
+      cursor: pointer;
+      background: var(--border-color);
+      padding: 0 var(--size-xs);
+      top: 0;
+    }
 
     @media (min-width: 768px) {
       nav {
@@ -37,6 +49,10 @@ export class FileExplorerApp extends HTMLElement {
       main {
         width: auto;
         flex: 1;
+      }
+
+      .handle {
+        display: none;
       }
     }
   `
@@ -75,6 +91,43 @@ export class FileExplorerApp extends HTMLElement {
           .querySelector("directory-tree")
           .setAttribute("dir", this.selectedDir)
       })
+
+    const main = this.shadowRoot.querySelector("main")
+    main.querySelector(".handle").addEventListener("mousedown", (e) => {
+      const startX = e.clientX
+      const startWidth = parseInt(
+        document.defaultView.getComputedStyle(main).width,
+        10
+      )
+      document.documentElement.addEventListener("mousemove", (event) =>
+        this.onHandleDrag({ event, startWidth, startX })
+      )
+      document.documentElement.addEventListener(
+        "mouseup",
+        this.onHandleStopDrag
+      )
+    })
+  }
+
+  onHandleDrag = ({ event, startWidth, startX }) => {
+    const main = this.shadowRoot.querySelector("main")
+    let width = startWidth + (event.clientX - startX) * -1
+
+    if (event.clientX <= 30) {
+      width = startX - 30
+    } else if (width < 30) {
+      width = 30
+    }
+
+    main.style.width = `${width}px`
+  }
+
+  onHandleStopDrag = () => {
+    document.documentElement.removeEventListener("mousemove", this.onHandleDrag)
+    document.documentElement.removeEventListener(
+      "mouseup",
+      this.onHandleStopDrag
+    )
   }
 
   render() {
@@ -85,6 +138,7 @@ export class FileExplorerApp extends HTMLElement {
           <directory-tree dir="${this.selectedDir}"></directory-tree>
         </nav>
         <main>
+          <div class="handle">↔️</div>
           <directory-content dir="${this.selectedDir}"></directory-content>
         </main>
       </div>
