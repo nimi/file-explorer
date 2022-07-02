@@ -31,7 +31,7 @@ export class Tree {
   static make = (args) => new Tree(args)
 
   constructor(root) {
-    this.root = TreeNode.make(root)
+    this.root = root ? TreeNode.make(root) : undefined
   }
 
   toJSON() {
