@@ -1,6 +1,6 @@
+import { DIRECTORY, FILE } from "./constants"
+
 const DEFAULT_DATE = new Date("July 2020")
-const DIRECTORY = "folder"
-const FILE = "file"
 
 /**
  interface ITreeNode {
@@ -47,3 +47,43 @@ export class Tree {
     }
   }
 }
+
+export const tree = Tree.make({
+  type: "folder",
+  name: "Folder",
+  children: [
+    {
+      type: "folder",
+      name: "Documents",
+      size: 0,
+      children: [
+        {
+          type: "folder",
+          name: "More documents",
+        },
+        {
+          type: "folder",
+          name: "Misc",
+        },
+      ],
+    },
+    {
+      type: "folder",
+      name: "Images",
+    },
+    {
+      type: "folder",
+      name: "System",
+    },
+    {
+      type: "file",
+      name: "Description.rtf",
+      size: 1024,
+    },
+    {
+      type: "file",
+      name: "Description.txt",
+      size: 1024 * 2,
+    },
+  ],
+})
