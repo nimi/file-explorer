@@ -1,3 +1,5 @@
+import { tree } from "./tree.js"
+
 import "../modules/directory-content.js"
 import "../modules/directory-tree.js"
 
@@ -16,7 +18,7 @@ export class FileExplorerApp extends HTMLElement {
     nav {
       flex: 1;
       border-right: solid 1px var(--border-color);
-      padding: var(--size-md);
+      padding: var(--size-sm);
       position: relative;
     }
     main {
@@ -39,6 +41,20 @@ export class FileExplorerApp extends HTMLElement {
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
+
+    this.updateView()
+  }
+
+  updateView(data = tree) {
+    this.render()
+    this.loadData(data)
+  }
+
+  loadData(data) {
+    this.shadowRoot.querySelector("directory-tree").data = data
+  }
+
+  render() {
     this.shadowRoot.innerHTML = `
       <style>${FileExplorerApp.styles}</style>
       <div>
