@@ -1,3 +1,18 @@
+:root {
+  /* Typography */
+  --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /* Sizing */
+  --size-xs: 0.25rem;
+  --size-sm: 0.5rem;
+  --size-md: 1rem;
+  --size-lg: 1.5rem;
+  --size-xl: 2rem;
+  --size-side-nav: 18rem;
+  /* Color */
+  --border-color: #eee;
+}
+
 /* Reset adapted from https://www.joshwcomeau.com/css/custom-css-reset/ */
 *,
 *::before,
