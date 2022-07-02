@@ -3,6 +3,8 @@ import { tree } from "./tree.js"
 import "../modules/directory-content.js"
 import "../modules/directory-tree.js"
 
+const DEFAULT_SELECTED_DIR = "Folder"
+
 export class FileExplorerApp extends HTMLElement {
   static styles = `
     :host {
@@ -39,6 +41,11 @@ export class FileExplorerApp extends HTMLElement {
     }
   `
 
+  constructor() {
+    super()
+    this.selectedDir = DEFAULT_SELECTED_DIR
+  }
+
   connectedCallback() {
     this.attachShadow({ mode: "open" })
 
@@ -60,10 +67,10 @@ export class FileExplorerApp extends HTMLElement {
       <style>${FileExplorerApp.styles}</style>
       <div>
         <nav>
-          <directory-tree></directory-tree>
+          <directory-tree dir="${this.selectedDir}"></directory-tree>
         </nav>
         <main>
-          <directory-content></directory-content>
+          <directory-content dir="${this.selectedDir}"></directory-content>
         </main>
       </div>
     `

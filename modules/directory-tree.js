@@ -119,6 +119,10 @@ export class DirectoryTree extends HTMLElement {
     }
   `
 
+  static get observedAttributes() {
+    return ["dir"]
+  }
+
   get data() {
     return this._data || []
   }
