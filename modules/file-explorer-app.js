@@ -1,13 +1,16 @@
+import "../modules/directory-content.js"
+import "../modules/directory-tree.js"
+
 export class FileExplorerApp extends HTMLElement {
   connectedCallback() {
     this.attachShadow({ mode: "open" })
     this.shadowRoot.innerHTML = `
       <div>
         <nav>
-          tree
+          <directory-tree></directory-tree>
         </nav>
         <main>
-          content
+          <directory-content></directory-content>
         </main>
       </div>
     `
