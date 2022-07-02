@@ -145,6 +145,17 @@ export class DirectoryContent extends HTMLElement {
     const { data } = this
     const dirName = this.getAttribute("dir")
     const contents = (data && this._tree?.findChildren(dirName)) ?? []
+    const sortedContents = [...contents].sort((a, b) => {
+      if (a.type === DIRECTORY) {
+        return a.name.localeCompare(b.name)
+      }
+
+      if (b.type === DIRECTORY) {
+        return 1
+      }
+
+      return a.name.localeCompare(b.name)
+    })
     const contentTable = `
       <table role="grid" aria-readonly="true">
         <thead>
@@ -161,7 +172,7 @@ export class DirectoryContent extends HTMLElement {
             </th>
           </tr>
         </thead>
-        ${renderRows(contents)}
+        ${renderRows(sortedContents)}
       </table>
     `
     const empty = `
