@@ -27,3 +27,15 @@ OR
 ```shell
 pnpm dev
 ```
+
+Run tests
+
+```shell
+npm run test
+```
+
+OR
+
+```shell
+pnpm test
+```
