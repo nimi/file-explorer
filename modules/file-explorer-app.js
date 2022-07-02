@@ -93,23 +93,17 @@ export class FileExplorerApp extends HTMLElement {
       })
 
     const main = this.shadowRoot.querySelector("main")
-    main.querySelector(".handle").addEventListener("mousedown", (e) => {
-      const startX = e.clientX
-      const startWidth = parseInt(
-        document.defaultView.getComputedStyle(main).width,
-        10
-      )
-      document.documentElement.addEventListener("mousemove", (event) =>
-        this.onHandleDrag({ event, startWidth, startX })
-      )
-      document.documentElement.addEventListener(
-        "mouseup",
-        this.onHandleStopDrag
-      )
+    main.querySelector(".handle").addEventListener("mousedown", (event) => {
+      const startX = event.clientX
+      const startWidth = parseInt(window.getComputedStyle(main).width, 10)
+      this.onHandleDrag = (event) =>
+        this.#onHandleDrag({ event, startWidth, startX })
+      document.addEventListener("mousemove", this.onHandleDrag)
+      document.addEventListener("mouseup", this.onHandleStopDrag.bind(this))
     })
   }
 
-  onHandleDrag = ({ event, startWidth, startX }) => {
+  #onHandleDrag({ event, startWidth, startX }) {
     const main = this.shadowRoot.querySelector("main")
     let width = startWidth + (event.clientX - startX) * -1
 
@@ -122,12 +116,9 @@ export class FileExplorerApp extends HTMLElement {
     main.style.width = `${width}px`
   }
 
-  onHandleStopDrag = () => {
-    document.documentElement.removeEventListener("mousemove", this.onHandleDrag)
-    document.documentElement.removeEventListener(
-      "mouseup",
-      this.onHandleStopDrag
-    )
+  onHandleStopDrag() {
+    document.removeEventListener("mousemove", this.onHandleDrag)
+    document.removeEventListener("mouseup", this.onHandleStopDrag)
   }
 
   render() {
