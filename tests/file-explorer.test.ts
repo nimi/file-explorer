@@ -30,7 +30,7 @@ describe("File explorer", async () => {
     expect(directories.length).toBe(1)
   })
 
-  it("should render the default 'Folder' directory contents", () => {
+  it("should render the default 'Files' directory contents", () => {
     const directoryContents = getDirectoryContents()
     const items = directoryContents?.querySelectorAll(".content-item")
     expect(items?.length).toBe(5)

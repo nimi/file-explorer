@@ -36,7 +36,6 @@ export class Tree {
 
   findChildren(name, root = this.root) {
     if (!root) return undefined
-
     if (root.name === name) {
       return root.children
     }
@@ -68,7 +67,7 @@ export class Tree {
 
 export const tree = Tree.make({
   type: "folder",
-  name: "Folder",
+  name: "Files",
   children: [
     {
       type: "folder",

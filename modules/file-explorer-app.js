@@ -3,7 +3,7 @@ import { tree } from "./tree.js"
 import "../modules/directory-content.js"
 import "../modules/directory-tree.js"
 
-const DEFAULT_SELECTED_DIR = "Folder"
+const DEFAULT_SELECTED_DIR = "Files"
 
 export class FileExplorerApp extends HTMLElement {
   static styles = `
