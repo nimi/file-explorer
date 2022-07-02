@@ -1,4 +1,4 @@
-import { DIRECTORY, FILE } from "./constants"
+import { DIRECTORY, FILE } from "./constants.js"
 
 const DEFAULT_DATE = new Date("July 2020")
 
