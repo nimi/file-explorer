@@ -37,13 +37,11 @@ export class Tree {
   findChildren(name, root = this.root) {
     if (!root) return undefined
 
-    let current = root
-
-    if (current.name === name) {
-      return current.children
+    if (root.name === name) {
+      return root.children
     }
 
-    let children = current.children ?? []
+    let children = root.children ?? []
 
     for (const child of children) {
       const maybeFound = this.findChildren(name, child)

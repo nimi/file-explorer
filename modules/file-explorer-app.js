@@ -52,6 +52,7 @@ export class FileExplorerApp extends HTMLElement {
 
   loadData(data) {
     this.shadowRoot.querySelector("directory-tree").data = data
+    this.shadowRoot.querySelector("directory-content").data = data
   }
 
   render() {
