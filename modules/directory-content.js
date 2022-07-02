@@ -114,7 +114,7 @@ export class DirectoryContent extends HTMLElement {
 
   render() {
     const { data } = this
-    const dirName = "Folder"
+    const dirName = this.getAttribute("dir")
     const contents = (data && this._tree?.findChildren(dirName)) ?? []
     const contentTable = `
       <table role="grid" aria-readonly="true">
