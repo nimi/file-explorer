@@ -34,17 +34,17 @@ export class DirectoryContent extends HTMLElement {
       border-collapse: collapse;
       border-spacing: 0;
       overflow: visible;
-      margin-top: 8px;
+      margin-top: var(--size-sm);
       width: 100%;
     }
 
     thead {
-      border-bottom: 1px solid #e3e3e3;
+      border-bottom: 1px solid var(--border-color);
     }
 
     thead th {
       position: relative;
-      line-height: 16px;
+      line-height: var(--size-md);
       vertical-align: bottom;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.6);
@@ -52,7 +52,7 @@ export class DirectoryContent extends HTMLElement {
     }
 
     th {
-      padding: 0 0.5rem 1rem;
+      padding: 0 var(--size-sm) var(--size-md);
     }
 
     button:focus,
@@ -65,17 +65,17 @@ export class DirectoryContent extends HTMLElement {
     }
 
     td {
-      padding: 0.5rem;
+      padding: var(--size-sm);
     }
 
     tbody tr:hover {
-      background-color: #eee;
+      background-color: var(--border-color);
     }
 
     .directory {
       all: unset;
       cursor: pointer;
-      line-height: 2rem;
+      line-height: var(--size-lg);
       flex: 1 1 auto;
       grid-area: directory;
     }
