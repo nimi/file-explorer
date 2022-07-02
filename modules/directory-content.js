@@ -120,10 +120,10 @@ export class DirectoryContent extends HTMLElement {
 
   updateView() {
     this.render()
-    this.addEventListeners()
+    this.setEventListeners()
   }
 
-  addEventListeners() {
+  setEventListeners() {
     const root = this.shadowRoot
     const table = root?.querySelector("table")
 
