@@ -104,12 +104,41 @@ export class DirectoryContent extends HTMLElement {
   set data(tree) {
     this._tree = tree
     this._data = tree.toJSON()
-    this.render()
+    this.updateView()
   }
 
   connectedCallback() {
     this.attachShadow({ mode: "open" })
+    this.updateView()
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name !== "dir" || oldValue === newValue || !this.shadowRoot) return
+
+    this.updateView()
+  }
+
+  updateView() {
     this.render()
+    this.addEventListeners()
+  }
+
+  addEventListeners() {
+    const root = this.shadowRoot
+    const table = root?.querySelector("table")
+
+    table?.addEventListener("click", (event) => {
+      if (!event.target.classList.contains("directory")) return
+
+      this.dispatchEvent(
+        new CustomEvent("dir-select", {
+          detail: {
+            id: event.target.id,
+          },
+          bubbles: true,
+        })
+      )
+    })
   }
 
   render() {

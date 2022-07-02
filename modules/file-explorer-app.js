@@ -55,6 +55,7 @@ export class FileExplorerApp extends HTMLElement {
   updateView(data = tree) {
     this.render()
     this.loadData(data)
+    this.setEventListeners()
   }
 
   loadData(data) {
@@ -62,10 +63,21 @@ export class FileExplorerApp extends HTMLElement {
     this.shadowRoot.querySelector("directory-content").data = data
   }
 
+  setEventListeners() {
+    this.shadowRoot
+      .querySelector(".file-explorer")
+      .addEventListener("dir-select", (e) => {
+        this.selectedDir = e.detail.id
+        this.shadowRoot
+          .querySelector("directory-content")
+          .setAttribute("dir", this.selectedDir)
+      })
+  }
+
   render() {
     this.shadowRoot.innerHTML = `
       <style>${FileExplorerApp.styles}</style>
-      <div>
+      <div class="file-explorer">
         <nav>
           <directory-tree dir="${this.selectedDir}"></directory-tree>
         </nav>
